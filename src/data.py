@@ -120,7 +120,8 @@ class ImageList(Dataset):
             coords = np.concatenate(
                     [sample_coords(n/2, self.patch_shape, weight) for weight in (fg, bg)])
         elif self.split == 'valid':
-            coords = sample_coords(n, self.patch_shape, mask)
+            fg = (mask > 0).astype('int32')
+            coords = sample_coords(n, self.patch_shape, fg)
         else: # test
             coords = get_all_coords((9, 9, 9), self.patch_shape, SHAPE, 15)
         samples, sub_samples, labels = self.crop(coords, label, path)
